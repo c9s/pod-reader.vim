@@ -91,12 +91,13 @@ fun! s:startPodReader(path)
   redraw
   echo "Searching pod files..."
 
-  let pod_files = split(system('find "'. basepath .'" -type f -iname "*.pod" -or -iname "*.pm" '),"\n")
+  let pod_files = split(system('find "'. basepath .'" -type f -iname "*.pod" '),"\n")
   if len(pod_files) == 0
     echo "pod file not found."
     return
   endif
 
+  let pm_files = split(system('find "'. basepath .'" -type f -iname "*.pm" '),"\n")
 
   if !exists( 'g:podListIndex' )
     let g:podListIndex = 0
@@ -117,8 +118,16 @@ fun! s:startPodReader(path)
   cal map( pod_files , 'substitute( v:val , "/" , "::" , "g" )'  )
   cal map( pod_files , 'substitute( v:val , "\\.\\(pod\\|pm\\)$" , "" , "" )'  )
 
+  cal map( pm_files , 'substitute( v:val , "'.basepath.'/\\?" , "" , "" )'  )
+  cal map( pm_files , 'substitute( v:val , "^.*lib/\\?" , "" , "" )'  )
+  cal map( pm_files , 'substitute( v:val , "/" , "::" , "g" )'  )
+  cal map( pm_files , 'substitute( v:val , "\\.\\(pod\\|pm\\)$" , "" , "" )'  )
+
   " silent 1,$delete _
+  cal append(0, pm_files)
+  cal append(0, "============================== PODS FROM PACKAGE ===================================")
   cal append(0, pod_files)
+  cal append(0, "==============================  PLAIN POD FILES  ===================================")
 
   setlocal cursorline
   setlocal nonu
