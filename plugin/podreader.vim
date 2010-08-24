@@ -91,7 +91,7 @@ fun! s:startPodReader(path)
   redraw
   echo "Searching pod files..."
 
-  let pod_files = split(system('find "'. basepath .'" -type f -iname "*.pod" '),"\n")
+  let pod_files = split(system('find "'. basepath .'" -type f -iname "*.pod" -or -iname "*.pm" '),"\n")
   if len(pod_files) == 0
     echo "pod file not found."
     return
@@ -115,7 +115,7 @@ fun! s:startPodReader(path)
   cal map( pod_files , 'substitute( v:val , "'.basepath.'/\\?" , "" , "" )'  )
   cal map( pod_files , 'substitute( v:val , "^.*lib/\\?" , "" , "" )'  )
   cal map( pod_files , 'substitute( v:val , "/" , "::" , "g" )'  )
-  cal map( pod_files , 'substitute( v:val , "\\.pod$" , "" , "" )'  )
+  cal map( pod_files , 'substitute( v:val , "\\.\(pod\|pm\)$" , "" , "" )'  )
 
   " silent 1,$delete _
   cal append(0, pod_files)
