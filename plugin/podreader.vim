@@ -115,7 +115,7 @@ fun! s:startPodReader(path)
   cal map( pod_files , 'substitute( v:val , "'.basepath.'/\\?" , "" , "" )'  )
   cal map( pod_files , 'substitute( v:val , "^.*lib/\\?" , "" , "" )'  )
   cal map( pod_files , 'substitute( v:val , "/" , "::" , "g" )'  )
-  cal map( pod_files , 'substitute( v:val , "\\.\(pod\|pm\)$" , "" , "" )'  )
+  cal map( pod_files , 'substitute( v:val , "\\.\\(pod\\|pm\\)$" , "" , "" )'  )
 
   " silent 1,$delete _
   cal append(0, pod_files)
